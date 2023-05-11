@@ -17,10 +17,11 @@ class UsersTableSeeder extends Seeder
         // DB::table('users')->delete();
         
         User::create([
-            'schoolId'  =>  '40943257',
-            'name'      =>  '蘇偉勝',
-            'email'     =>  '40943257@nfu.edu.tw',
-            'password'  =>  Hash::make('40943257')
+            'account'       =>  '40943257',
+            'name'          =>  '蘇偉勝',
+            'email'         =>  '40943257@nfu.edu.tw',
+            'password'      =>  Hash::make('40943257'),
+            'permissions'   =>  2
         ]);
     }
 }

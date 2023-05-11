@@ -20,5 +20,7 @@ Route::get('/', [PageController::class, 'index'])->name('index');
 Route::prefix('user')->name('user.')->group(function () {
    Route::get('login', [UserController::class, 'loginPage'])->name('loginPage');
    Route::post('login', [UserController::class, 'login'])->name('login');
+   Route::get('signup', [UserController::class, 'signupPage'])->name('signupPage');
+   Route::post('signup', [UserController::class, 'signup'])->name('signup');
    Route::get('logout', [UserController::class, 'logout'])->name('logout');
 });

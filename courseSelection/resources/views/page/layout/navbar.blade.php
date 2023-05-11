@@ -11,10 +11,16 @@
                 @if (auth()->check())
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('user.logout') }}">登出</a>  
-                    </li>              
+                    </li>     
+                    <li class="nav-item">
+                        <a class="nav-link{{ (request()->routeIs('user.userInfoPage')) ? ' active' : '' }}" href="{{ route('user.userInfoPage') }}">{{ auth()->user()->name }}</a>  
+                    </li>                
                 @else
                     <li class="nav-item">
                         <a class="nav-link{{ (request()->routeIs('user.loginPage')) ? ' active' : '' }}" href="{{ route('user.loginPage') }}">登入</a>  
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{{ (request()->routeIs('user.signupPage')) ? ' active' : '' }}" href="{{ route('user.signupPage') }}">建立帳號</a>  
                     </li>
                 @endif
             </div>

@@ -9,4 +9,15 @@ class PageController extends Controller
     public function index() {
         return view('page.index');
     }
+
+    public function addCoursePage() {
+        if(auth()->check())
+            return view('page.addCoursePage');
+        else
+            return view('user.loginPage');
+    }
+
+    public function addCourse(Request $request) {
+        return $request->all();
+    }
 }

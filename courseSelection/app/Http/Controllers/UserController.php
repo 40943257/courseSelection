@@ -44,7 +44,7 @@ class UserController extends Controller
     }
 
     public function signup (Request $request) {
-        if(!User::where('account', '=', $request->account)->get()) {
+        if(User::where('account', '=', $request->account)->count() == 0) {
             $data = [
                 'account'       =>  $request->account,
                 'password'      =>  Hash::make($request->password),

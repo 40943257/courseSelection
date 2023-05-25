@@ -17,6 +17,11 @@ use App\Http\Controllers\PageController;
 
 Route::get('/', [PageController::class, 'index'])->name('index');
 
+Route::prefix('page')->name('page.')->group(function () {
+   Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
+   Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
+});
+
 Route::prefix('user')->name('user.')->group(function () {
    Route::get('login', [UserController::class, 'loginPage'])->name('loginPage');
    Route::post('login', [UserController::class, 'login'])->name('login');

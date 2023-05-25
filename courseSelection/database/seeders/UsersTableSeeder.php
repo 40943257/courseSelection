@@ -23,5 +23,21 @@ class UsersTableSeeder extends Seeder
             'password'      =>  Hash::make('40943257'),
             'permissions'   =>  2
         ]);
+
+        User::create([
+            'account'       =>  '40943258',
+            'name'          =>  '蘇富羿',
+            'email'         =>  '40943258@nfu.edu.tw',
+            'password'      =>  Hash::make('40943258'),
+            'permissions'   =>  2
+        ]);
+
+        User::create([
+            'account'       =>  'teacher',
+            'name'          =>  'teacher',
+            'email'         =>  'teacher@nfu.edu.tw',
+            'password'      =>  Hash::make('teacher'),
+            'permissions'   =>  1
+        ]);
     }
 }

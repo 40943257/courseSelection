@@ -10,15 +10,7 @@
         <div class="col-md-4">
             <form action="{{ route('user.signup') }}" method="POST">
                 {{ csrf_field() }}
-                @if ($errors->any())
-                    <div>
-                        @foreach ($errors->all() as $error)
-                            <div class="mb-3">
-                                {{ $error }}
-                            </div>
-                        @endforeach
-                    </div>
-                @endif
+                @include('page.layout.error')
                 <div class="mb-3">
                     <label for="account" class="form-label">帳號</label>
                     <input type="account" class="form-control" name = "account" id="account" placeholder="帳號">

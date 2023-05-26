@@ -7,15 +7,7 @@
     <form action="{{ route('page.addCourse') }}" method="POST">  
         <div class="row">
             {{ csrf_field() }}
-            @if ($errors->any())
-                <div>
-                    @foreach ($errors->all() as $error)
-                        <div class="mb-3">
-                            {{ $error }}
-                        </div>
-                    @endforeach
-                </div>
-            @endif
+            @include('page.layout.error')
             <div class="col-md col"></div>
             <div class="col-md-6 col-12">
                 <div class="row">
@@ -25,30 +17,40 @@
                             <input type="name" class="form-control" name = "name" id="name">
                         </div>
                     </div>
-                    <div class="col mx-1 my-1">
+                    <div class="col">
+                        <div class="mb-3 mx-1 my-1">
+                            <label for="maxStudentNum" class="form-label">課程人數</label>
+                            <select class="form-select" aria-label="Default select example" name="maxStudentNum" id="maxStudentNum">
+                                @for ($i = 1; $i <= 70; $i++)
+                                    <option values={{ $i }}>{{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    {{-- <div class="col mx-1 my-1">
                         <div class="mb-3">
                             <label for="maxStudentNum" class="form-label">課程人數</label>
                             <input type="num" class="form-control" name = "maxStudentNum" id="maxStudentNum">
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 
                 <div class="row">
                     <div class="col">
                         <div class="mb3 mx-1 my-1">
-                            <select class="form-select" aria-label="Default select example" name="credit">
-                                <option selected>學分數</option>
-                                <option value="0">0</option>
-                                <option value="1">1</option>
-                                <option value="2">2</option>
-                                <option value="3">3</option>
+                            <label for="credit" class="form-label">學分數</label>
+                            <select class="form-select" aria-label="Default select example" name="credit" id="credit">
+                                <option value=0>0</option>
+                                <option value=1>1</option>
+                                <option value=2>2</option>
+                                <option value=3>3</option>
                             </select>
                         </div>
                     </div>
                     <div class="col">
                         <div class="mb3 mx-1 my-1">
-                            <select class="form-select" aria-label="Default select example" name="classRoom">
-                                <option selected>教室</option>
+                            <label for="classRoom" class="form-label">教室</label>
+                            <select class="form-select" aria-label="Default select example" name="classRoom" id="classRoom">
                                 <option value="501">501</option>
                                 <option value="513">513</option>
                                 <option value="601">601</option>

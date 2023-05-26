@@ -9,7 +9,7 @@
                 @if (auth()->check())
                     @if (auth()->user()->permissions == 1)
                         <li class="nav-item">
-                            <a class="nav-link" href="#">我的課程</a>  
+                            <a class="nav-link{{ (request()->routeIs('page.myClassPage')) ? ' active' : '' }}" href=" {{ route('page.myClassPage') }} ">我的課程</a>  
                         </li> 
                         <li class="nav-item">
                             <a class="nav-link{{ (request()->routeIs('page.addCoursePage')) ? ' active' : '' }}" href=" {{ route('page.addCoursePage') }} ">排課</a>  

@@ -20,6 +20,7 @@ Route::get('/', [PageController::class, 'index'])->name('index');
 Route::prefix('page')->name('page.')->group(function () {
    Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
    Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
+   Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
 });
 
 Route::prefix('user')->name('user.')->group(function () {

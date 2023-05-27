@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\TeacherCourse;
 use App\Models\CourseInfo;
+use Illuminate\Support\Facades\DB;
 
 class PageController extends Controller
 {
@@ -79,25 +80,17 @@ class PageController extends Controller
 
     public function myClassPage() {
         if(auth()->check()){
-            $days = ['Mon', 'Tues', 'Thrs', 'Wend', 'Fri'];
-            $times = [];
-            foreach($days as $day) {
-                for($i = 1; $i <= 8; $i++) {
-                    $time = $day . '_' . $i;
-                    $count;
-                    if(auth()->user()->permissions == 1) {
-                        $count = CourseInfo::where('time', $time)
-                                            ->where('teacherId', auth()->user()->id)
-                                            ->count(); 
-                    }
-                    if($count == 1) 
-                        array_push($times, $time);
-                }
+            if(auth()->user()->permissions == 1) {
+                $results = DB::table('teacher_courses')
+                            ->select('users.name as teacherName', 'teacher_courses.name as courseName', 'course_infos.classroom', 'course_infos.time')
+                            ->join('course_infos', 'teacher_courses.id', '=', 'course_infos.id')
+                            ->join('users', 'teacher_courses.teacherId', '=', 'users.id')
+                            ->where('teacher_courses.teacherId', '=', auth()->user()->id)
+                            ->get();
             }
-    
-            // return $times;
+
             $data = [
-                'times' => $times
+                'results' => $results
             ];
             return view('page.myClassPage', $data);
         }

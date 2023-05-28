@@ -21,6 +21,8 @@ Route::prefix('page')->name('page.')->group(function () {
    Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
    Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
    Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
+   Route::get('searchCourse', [PageController::class, 'searchCoursePage'])->name('searchCoursePage');
+   Route::get('courseSelect', [PageController::class, 'courseSelectPage'])->name('courseSelectPage');
 });
 
 Route::prefix('user')->name('user.')->group(function () {

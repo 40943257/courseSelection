@@ -8,7 +8,7 @@
             <div class="col-md-4">
             </div>
             <div class="col-md-4">
-                <form action="{{ route('user.signup') }}" method="POST">
+                <form action="{{ route('page.searchResultsPage') }}" method="GET">
                     {{ csrf_field() }}
                     @include('page.layout.error')
                     <div class="mb-3">
@@ -26,20 +26,20 @@
                     <div class="mb-3">
                         <select class="form-select" aria-label="Default select example" id="day" name="day">
                             <option value="-1">星期</option>
-                            <option value="1">星期一</option>
-                            <option value="2">星期二</option>
-                            <option value="3">星期三</option>
-                            <option value="4">星期四</option>
-                            <option value="5">星期五</option>
+                            <option value="Mon">星期一</option>
+                            <option value="Tuse">星期二</option>
+                            <option value="Thrs">星期三</option>
+                            <option value="Wend">星期四</option>
+                            <option value="Fri">星期五</option>
                         </select>
                     </div>
                     <div class="mb-3">
-                        <select class="form-select" aria-label="Default select example" id="day" name="day">
-                            <option value="-1">學分數</option>
-                            <option value="0">0學分</option>
-                            <option value="1">1學分</option>
-                            <option value="2">2學分</option>
-                            <option value="3">3學分</option>
+                        <select class="form-select" aria-label="Default select example" id="credit" name="credit">
+                            <option value= -1>學分數</option>
+                            <option value= 0>0學分</option>
+                            <option value= 1>1學分</option>
+                            <option value= 2>2學分</option>
+                            <option value= 3>3學分</option>
                         </select>
                     </div>
                     <div class=" d-flex align-items-center justify-content-center">

@@ -117,10 +117,26 @@ class PageController extends Controller
         }
     }
 
-    public function courseSelectPage()
+    public function searchResultsPage(Request $request)
     {
         if (auth()->check()) {
-            return view('page.courseSelectPage');
+            $results = DB::table('users')
+                ->select('teacher_courses.id', 'users.name as teacherName', 'teacher_courses.name as courseName', 'teacher_courses.credit', 'teacher_courses.relate'
+                        , 'course_infos.classroom', DB::raw('GROUP_CONCAT(course_infos.time) as times'))
+                ->join('teacher_courses', 'teacher_courses.teacherId', '=', 'users.id')
+                ->join('course_infos', 'course_infos.id', '=', 'teacher_courses.id')
+                ->where('users.permissions', 1)
+                ->groupBy('id', 'teacherName', 'courseName', 'credit', 'relate', 'classroom');
+            if ($request->courseId != '')
+                    $results->where('teacher_courses.id', $request->courseId);
+            if ($request->courseName != '')
+                $results->where('teacher_courses.name', $request->courseName);
+            if ($request->teacherName != '')
+                $results->where('users.name', $request->teacherName);
+            if ($request->credit != -1)
+                $results->where('teacher_courses.credit', $request->credit);
+            return $results->get();
+            return view('page.searchResultsPage');
         } else {
             return view('user.loginPage');
         }

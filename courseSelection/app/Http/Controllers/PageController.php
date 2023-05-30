@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\TeacherCourse;
 use App\Models\CourseInfo;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class PageController extends Controller
 {
@@ -92,12 +93,6 @@ class PageController extends Controller
                     ->get();
             } else if (auth()->user()->permissions == 2) {
                 $results = [];
-                // $results = DB::table('student_courses')
-                //             ->select('users.name as teacherName', 'student_courses.name as courseName', 'course_infos.classroom', 'course_infos.time')
-                //             ->join('course_infos', 'student_courses.id', '=', 'course_infos.id')
-                //             ->join('users', 'student_courses.teacherId', '=', 'users.id')
-                //             ->where('student_courses.teacherId', '=', auth()->user()->id)
-                //             ->get();
             }
 
             $data = [
@@ -121,24 +116,47 @@ class PageController extends Controller
     {
         if (auth()->check()) {
             $results = DB::table('users')
-                ->select('teacher_courses.id', 'users.name as teacherName', 'teacher_courses.name as courseName', 'teacher_courses.credit', 'teacher_courses.relate'
-                        , 'course_infos.classroom', DB::raw('GROUP_CONCAT(course_infos.time) as times'))
+                ->select(
+                    'teacher_courses.id',
+                    'users.name as teacherName',
+                    'teacher_courses.name as courseName',
+                    'teacher_courses.credit',
+                    'teacher_courses.relate',
+                    'course_infos.classroom',
+                    DB::raw('GROUP_CONCAT(course_infos.time) as times')
+                )
                 ->join('teacher_courses', 'teacher_courses.teacherId', '=', 'users.id')
                 ->join('course_infos', 'course_infos.id', '=', 'teacher_courses.id')
                 ->where('users.permissions', 1)
                 ->groupBy('id', 'teacherName', 'courseName', 'credit', 'relate', 'classroom');
             if ($request->courseId != '')
-                    $results->where('teacher_courses.id', $request->courseId);
+                $results->where('teacher_courses.id', $request->courseId);
             if ($request->courseName != '')
                 $results->where('teacher_courses.name', $request->courseName);
             if ($request->teacherName != '')
                 $results->where('users.name', $request->teacherName);
             if ($request->credit != -1)
                 $results->where('teacher_courses.credit', $request->credit);
-            return $results->get();
-            return view('page.searchResultsPage');
+
+            $results = $results->get();
+
+            if ($request->day != '-1') {
+                $results = $results->filter(function ($result) use ($request) {
+                    return Str::contains($result->times, $request->day);
+                });
+            }
+
+            $data = [
+                'results' => $results
+            ];
+            return view('page.searchResultsPage', $data);
         } else {
             return view('user.loginPage');
         }
+    }
+
+    public function courseSelect(Request $request)
+    {
+        return $request->courseId;
     }
 }

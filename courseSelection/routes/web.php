@@ -23,7 +23,7 @@ Route::prefix('page')->name('page.')->group(function () {
    Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
    Route::get('searchCourse', [PageController::class, 'searchCoursePage'])->name('searchCoursePage');
    Route::get('searchResults', [PageController::class, 'searchResultsPage'])->name('searchResultsPage');
-   Route::get('courseSelect', [PageController::class, 'courseSelectPage'])->name('courseSelectPage');
+   Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
 });
 
 Route::prefix('user')->name('user.')->group(function () {

@@ -35,11 +35,11 @@
                     </div>
                     <div class="mb-3">
                         <select class="form-select" aria-label="Default select example" id="credit" name="credit">
-                            <option value= -1>學分數</option>
-                            <option value= 0>0學分</option>
-                            <option value= 1>1學分</option>
-                            <option value= 2>2學分</option>
-                            <option value= 3>3學分</option>
+                            <option value=-1>學分數</option>
+                            <option value=0>0學分</option>
+                            <option value=1>1學分</option>
+                            <option value=2>2學分</option>
+                            <option value=3>3學分</option>
                         </select>
                     </div>
                     <div class=" d-flex align-items-center justify-content-center">

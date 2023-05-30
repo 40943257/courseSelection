@@ -19,7 +19,9 @@
                         <label for="password" class="form-label">密碼</label>
                         <input type="password" class="form-control" name="password" id="password" placeholder="密碼">
                     </div>
-                    <button type="submit" class="btn btn-primary">登入</button>
+                    <div class=" d-flex align-items-center justify-content-center">
+                        <button type="submit" class="btn btn-primary mx-1 my-1">登入</button>
+                    </div>
                 </form>
             </div>
             <div class="col-md-4">

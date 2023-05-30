@@ -33,7 +33,9 @@
                             <option value="1">老師</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">建立帳號</button>
+                    <div class=" d-flex align-items-center justify-content-center">
+                        <button type="submit" class="btn btn-primary mx-1 my-1">建立帳號</button>
+                    </div>
                 </form>
             </div>
             <div class="col-md-4">

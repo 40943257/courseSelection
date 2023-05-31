@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\TeacherCourse;
+use App\Models\StudentCourse;
 use App\Models\CourseInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -92,7 +93,13 @@ class PageController extends Controller
                     ->where('teacher_courses.teacherId', '=', auth()->user()->id)
                     ->get();
             } else if (auth()->user()->permissions == 2) {
-                $results = [];
+                $results = DB::table('student_courses')
+                    ->select('users.name as teacherName', 'teacher_courses.name as courseName', 'course_infos.classroom', 'course_infos.time')
+                    ->join('teacher_courses', 'student_courses.courseId', '=', 'teacher_courses.id')
+                    ->join('course_infos', 'teacher_courses.id', '=', 'course_infos.id')
+                    ->join('users', 'teacher_courses.teacherId', '=', 'users.id')
+                    ->where('student_courses.studentId', '=', auth()->user()->id)
+                    ->get();
             }
 
             $data = [
@@ -157,6 +164,51 @@ class PageController extends Controller
 
     public function courseSelect(Request $request)
     {
-        return $request->courseId;
+        // return $request->courseId;
+
+        $count = StudentCourse::where('courseId', $request->courseId)
+                        ->where('studentId', auth()->user()->id)
+                        ->count();
+
+        if ($count != 0) {
+            return back()->withErrors([
+                'message' => '你已經選了 id = ' . $request->courseId . ' 的課程'
+            ]);
+        }
+
+        $results = DB::table('student_courses')
+            ->select('course_infos.time')
+            ->join('course_infos', 'course_infos.id', '=', 'student_courses.courseId')
+            ->where('student_courses.studentId', auth()->user()->id)
+            ->get();
+        $results2 = CourseInfo::select('time')
+            ->where('id', $request->courseId)
+            ->get();
+        foreach ($results2 as $result2) {
+            foreach ($results as $result) {
+                if ($result->time == $result2->time) {
+                    return back()->withErrors([
+                        'message' => '這個時間 ' . $result->time . ' 有課'
+                    ]);
+                }
+            }
+        }
+
+        $teacherCourse = TeacherCourse::find($request->courseId);
+        $result =  $teacherCourse->incrementNowStudentNum();
+        if($result == 'full') {
+            return back()->withErrors([
+                'message' => '以滿人 '
+            ]);
+        }
+
+        $data = [
+            'studentId' =>  auth()->user()->id,
+            'courseId'  =>  $request->courseId,
+        ];
+
+        StudentCourse::create($data);
+
+        return redirect()->route('page.myClassPage');
     }
 }

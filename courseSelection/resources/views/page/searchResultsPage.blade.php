@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container my-1">
+        @include('page.layout.error')
         @php($num = 0)
         <div class="table-responsive">
             <table class="table table-bordered my-1 text-center align-middle">
@@ -43,7 +44,8 @@
                                                     data-bs-dismiss="modal">關閉</button>
                                                 <form action="{{ route('page.courseSelect') }}" method="POST">
                                                     {{ csrf_field() }}
-                                                    <input type="hidden" name="courseId" id="courseId" value="{{ $result->id }}">
+                                                    <input type="hidden" name="courseId" id="courseId"
+                                                        value="{{ $result->id }}">
                                                     <button type="submit" class="btn btn-primary">選擇</button>
                                                 </form>
                                             </div>

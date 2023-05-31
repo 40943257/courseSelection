@@ -12,11 +12,23 @@ class TeacherCourse extends Model
     protected $fillable = [
         'name',
         'teacherId',
-        'maxStudentNum',         
-        'nowStudentNum',        
-        'credit',               
-        'relate',   
+        'maxStudentNum',
+        'nowStudentNum',
+        'credit',
+        'relate',
     ];
+
+    public function incrementNowStudentNum()
+    {
+
+        if ($this->nowStudentNum >= $this->maxStudentNum) {
+            return 'full';
+        }
+
+        $this->increment('nowStudentNum');
+        return 'ok';
+    }
+
 
     protected $table = 'teacher_courses';
 }

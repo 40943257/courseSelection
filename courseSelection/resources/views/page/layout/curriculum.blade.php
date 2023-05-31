@@ -3,11 +3,11 @@
         <thead>
             <tr>
                 <th scope="col">#</th>
-                <th scope="col">Mon</th>
-                <th scope="col">Tues</th>
-                <th scope="col">Thrs</th>
-                <th scope="col">Wend</th>
-                <th scope="col">Fri</th>
+                <th scope="col">星期一</th>
+                <th scope="col">星期二</th>
+                <th scope="col">星期三</th>
+                <th scope="col">星期四</th>
+                <th scope="col">星期五</th>
             </tr>
         </thead>
         <tbody>

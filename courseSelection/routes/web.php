@@ -18,12 +18,14 @@ use App\Http\Controllers\PageController;
 Route::get('/', [PageController::class, 'index'])->name('index');
 
 Route::prefix('page')->name('page.')->group(function () {
-   Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
-   Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
-   Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
+   route::middleware('auth')->group(function() {
+      Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
+      Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
+      Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
+      Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
+   });
    Route::get('searchCourse', [PageController::class, 'searchCoursePage'])->name('searchCoursePage');
    Route::get('searchResults', [PageController::class, 'searchResultsPage'])->name('searchResultsPage');
-   Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
 });
 
 Route::prefix('user')->name('user.')->group(function () {

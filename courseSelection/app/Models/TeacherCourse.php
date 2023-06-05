@@ -29,6 +29,10 @@ class TeacherCourse extends Model
         return 'ok';
     }
 
+    public function decrementNowStudentNum()
+    {
+        $this->decrement('nowStudentNum');
+    }
 
     protected $table = 'teacher_courses';
 }

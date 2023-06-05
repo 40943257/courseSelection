@@ -18,7 +18,7 @@ return new class extends Migration
             $table->integer('maxStudentNum');
             $table->integer('nowStudentNum');
             $table->integer('credit');
-            $table->string('relate');
+            $table->string('relate')->nullable();
             $table->timestamps();
         });
     }

@@ -9,8 +9,12 @@
             <div class="navbar-nav me-auto mb-2 mb-lg-0">
                 @if (auth()->check())
                     <li class="nav-item">
-                        <a class="nav-link{{ request()->routeIs('page.myClassPage') ? ' active' : '' }}"
-                            href=" {{ route('page.myClassPage') }} ">我的課程</a>
+                        <a class="nav-link{{ request()->routeIs('page.myCurriculumPage') ? ' active' : '' }}"
+                            href=" {{ route('page.myCurriculumPage') }} ">我的課表</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link{{ request()->routeIs('page.myCoursePage') ? ' active' : '' }}"
+                            href=" {{ route('page.myCoursePage') }} ">我的課程</a>
                     </li>
                     @if (auth()->user()->permissions == 1)
                         <li class="nav-item">

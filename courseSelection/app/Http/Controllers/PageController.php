@@ -76,10 +76,10 @@ class PageController extends Controller
             CourseInfo::create($data);
         }
 
-        return redirect()->route('page.myClassPage');
+        return redirect()->route('page.myCurriculumPage');
     }
 
-    public function myClassPage()
+    public function myCurriculumPage()
     {
         if (auth()->user()->permissions == 1) {
             $results = DB::table('teacher_courses')
@@ -101,7 +101,7 @@ class PageController extends Controller
         $data = [
             'results' => $results
         ];
-        return view('page.myClassPage', $data);
+        return view('page.myCurriculumPage', $data);
     }
 
     public function searchCoursePage()
@@ -116,6 +116,8 @@ class PageController extends Controller
                 'teacher_courses.id',
                 'users.name as teacherName',
                 'teacher_courses.name as courseName',
+                'teacher_courses.maxStudentNum',
+                'teacher_courses.nowStudentNum',
                 'teacher_courses.credit',
                 'teacher_courses.relate',
                 'course_infos.classroom',
@@ -124,7 +126,7 @@ class PageController extends Controller
             ->join('teacher_courses', 'teacher_courses.teacherId', '=', 'users.id')
             ->join('course_infos', 'course_infos.id', '=', 'teacher_courses.id')
             ->where('users.permissions', 1)
-            ->groupBy('id', 'teacherName', 'courseName', 'credit', 'relate', 'classroom');
+            ->groupBy('id', 'teacherName', 'courseName', 'maxStudentNum', 'nowStudentNum', 'credit', 'relate', 'classroom');
         if ($request->courseId != '')
             $results->where('teacher_courses.id', $request->courseId);
         if ($request->courseName != '')
@@ -195,6 +197,65 @@ class PageController extends Controller
 
         StudentCourse::create($data);
 
-        return redirect()->route('page.myClassPage');
+        return redirect()->route('page.myCurriculumPage');
+    }
+
+    public function myCoursePage()
+    {
+        if (auth()->user()->permissions == 1) {
+            $results = DB::table('teacher_courses')
+                ->select(
+                    'teacher_courses.id',
+                    'teacher_courses.name as courseName',
+                    'teacher_courses.maxStudentNum',
+                    'teacher_courses.credit',
+                    'teacher_courses.relate',
+                    'course_infos.classroom',
+                    DB::raw('GROUP_CONCAT(course_infos.time) as times')
+                )
+                ->join('course_infos', 'course_infos.id', '=', 'teacher_courses.id')
+                ->where('teacher_courses.teacherId', auth()->user()->id)
+                ->groupBy('id', 'courseName', 'maxStudentNum', 'credit', 'relate', 'classroom')
+                ->get();
+        } else if (auth()->user()->permissions == 2) {
+            $results = DB::table('student_courses')
+                ->select(
+                    'teacher_courses.id',
+                    'teacher_courses.name as courseName',
+                    'users.name as teacherName',
+                    'teacher_courses.maxStudentNum',
+                    'course_infos.classroom',
+                    'teacher_courses.credit',
+                    'teacher_courses.relate',
+                    DB::raw('GROUP_CONCAT(course_infos.time) as times')
+                )
+                ->join('teacher_courses', 'student_courses.courseId', '=', 'teacher_courses.id')
+                ->join('course_infos', 'teacher_courses.id', '=', 'course_infos.id')
+                ->join('users', 'teacher_courses.teacherId', '=', 'users.id')
+                ->where('student_courses.studentId', '=', auth()->user()->id)
+                ->groupBy('id', 'courseName', 'teacherName', 'maxStudentNum', 'credit', 'relate', 'classroom')
+                ->get();
+            // return $results;
+        }
+        $data = [
+            'results' =>  $results
+        ];
+        return view('page.myCoursePage', $data);
+    }
+
+    public function deleteCourse(TeacherCourse $teacherCourse)
+    {
+        if (auth()->user()->permissions == 1) {
+            StudentCourse::where('courseId', $teacherCourse->id)->delete();
+            CourseInfo::where('id', $teacherCourse->id)->delete();
+            $teacherCourse->delete();
+        } else if (auth()->user()->permissions == 2) {
+            $count = StudentCourse::where('courseId', $teacherCourse->id)
+                ->where('studentId', auth()->user()->id)
+                ->delete();
+            if ($count != 0)
+                $teacherCourse->decrementNowStudentNum();
+        }
+        return back();
     }
 }

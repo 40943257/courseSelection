@@ -18,11 +18,13 @@ use App\Http\Controllers\PageController;
 Route::get('/', [PageController::class, 'index'])->name('index');
 
 Route::prefix('page')->name('page.')->group(function () {
-   route::middleware('auth')->group(function() {
+   route::middleware('auth')->group(function () {
       Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
       Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
-      Route::get('myClass', [PageController::class, 'myClassPage'])->name('myClassPage');
+      Route::get('myCurriculum', [PageController::class, 'myCurriculumPage'])->name('myCurriculumPage');
       Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
+      Route::get('myCourse', [PageController::class, 'myCoursePage'])->name('myCoursePage');
+      Route::delete('deleteCourse/{teacherCourse}', [PageController::class, 'deleteCourse'])->name('deleteCourse');
    });
    Route::get('searchCourse', [PageController::class, 'searchCoursePage'])->name('searchCoursePage');
    Route::get('searchResults', [PageController::class, 'searchResultsPage'])->name('searchResultsPage');

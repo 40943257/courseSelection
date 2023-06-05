@@ -1,6 +1,6 @@
 @extends('page.layout.master')
 
-@section('title', 'myClass')
+@section('title', 'myCurriculumPage')
 
 @section('content')
     <div class="container">

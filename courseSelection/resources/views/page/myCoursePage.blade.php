@@ -51,8 +51,6 @@
                                                     method="POST">
                                                     {{ csrf_field() }}
                                                     @method('DELETE')
-                                                    <input type="hidden" name="courseId" id="courseId"
-                                                        value="{{ $result->id }}">
                                                     <button type="submit" class="btn btn-danger">刪除</button>
                                                 </form>
                                             </div>

@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\SignRequest;
+use App\Http\Requests\LoginRequest;
 
 class UserController extends Controller
 {
@@ -15,7 +17,7 @@ class UserController extends Controller
             return view('user.loginPage');
     }
 
-    public function login(Request $request) {
+    public function login(LoginRequest $request) {
         $check1 = [
             'email'     =>  $request->account,
             'password'  =>  $request->password
@@ -43,7 +45,7 @@ class UserController extends Controller
             return view('user.signupPage');
     }
 
-    public function signup (Request $request) {
+    public function signup (SignRequest $request) {
         if(User::where('account', '=', $request->account)->count() == 0) {
             $data = [
                 'account'       =>  $request->account,
@@ -62,6 +64,8 @@ class UserController extends Controller
                 'message' => '帳號已存在'
             ]);
         }
+        return 1;
+        return back();
     }
 
     public function logout() {

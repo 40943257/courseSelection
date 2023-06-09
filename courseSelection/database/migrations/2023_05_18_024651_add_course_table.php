@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('teacher_courses', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('teacherId');
+            $table->bigInteger('teacherId');
             $table->integer('maxStudentNum');
             $table->integer('nowStudentNum');
             $table->integer('credit');

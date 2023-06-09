@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('student_courses', function (Blueprint $table) {
-            $table->integer('studentId');
-            $table->integer('courseId');
+            $table->bigInteger('studentId');
+            $table->bigInteger('courseId');
             $table->timestamps();
         });
     }

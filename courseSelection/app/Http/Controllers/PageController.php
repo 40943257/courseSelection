@@ -8,6 +8,9 @@ use App\Models\StudentCourse;
 use App\Models\CourseInfo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use App\Http\Requests\AddCourseRequest;
+use App\Http\Requests\SearchResultsPageRequest;
+use App\Http\Requests\CourseSelectRequest;
 
 class PageController extends Controller
 {
@@ -21,7 +24,7 @@ class PageController extends Controller
         return view('page.addCoursePage');
     }
 
-    public function addCourse(Request $request)
+    public function addCourse(AddCourseRequest $request)
     {
         // return $request->all();
         // return auth()->user()->id;
@@ -109,7 +112,7 @@ class PageController extends Controller
         return view('page.searchCoursePage');
     }
 
-    public function searchResultsPage(Request $request)
+    public function searchResultsPage(SearchResultsPageRequest $request)
     {
         $results = DB::table('users')
             ->select(
@@ -130,9 +133,9 @@ class PageController extends Controller
         if ($request->courseId != '')
             $results->where('teacher_courses.id', $request->courseId);
         if ($request->courseName != '')
-            $results->where('teacher_courses.name', $request->courseName);
+            $results->where('teacher_courses.name', 'LIKE', '%' . $request->courseName . '%');
         if ($request->teacherName != '')
-            $results->where('users.name', $request->teacherName);
+            $results->where('users.name', 'LIKE', '%' . $request->teacherName . '%');
         if ($request->credit != -1)
             $results->where('teacher_courses.credit', $request->credit);
 
@@ -150,7 +153,7 @@ class PageController extends Controller
         return view('page.searchResultsPage', $data);
     }
 
-    public function courseSelect(Request $request)
+    public function courseSelect(CourseSelectRequest $request)
     {
         // return $request->courseId;
 
@@ -246,14 +249,20 @@ class PageController extends Controller
     public function deleteCourse(TeacherCourse $teacherCourse)
     {
         if (auth()->user()->permissions == 1) {
-            StudentCourse::where('courseId', $teacherCourse->id)->delete();
-            CourseInfo::where('id', $teacherCourse->id)->delete();
-            $teacherCourse->delete();
+            if ($teacherCourse->teacherId == auth()->user()->id) {
+                StudentCourse::where('courseId', $teacherCourse->id)->delete();
+                CourseInfo::where('id', $teacherCourse->id)->delete();
+                $teacherCourse->delete();
+            } else {
+                return back()->withErrors([
+                    'message' => '這不是你的課程'
+                ]);
+            }
         } else if (auth()->user()->permissions == 2) {
             $count = StudentCourse::where('courseId', $teacherCourse->id)
                 ->where('studentId', auth()->user()->id)
                 ->delete();
-            if ($count != 0)
+            if ($count == 1)
                 $teacherCourse->decrementNowStudentNum();
         }
         return back();

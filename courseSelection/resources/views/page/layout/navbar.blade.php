@@ -18,6 +18,10 @@
                     </li>
                     @if (auth()->user()->permissions == 1)
                         <li class="nav-item">
+                            <a class="nav-link{{ request()->routeIs('page.courseManagements') ? ' active' : '' }}"
+                                href=" {{ route('page.courseManagements') }} ">課程管理</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link{{ request()->routeIs('page.addCoursePage') ? ' active' : '' }}"
                                 href=" {{ route('page.addCoursePage') }} ">排課</a>
                         </li>

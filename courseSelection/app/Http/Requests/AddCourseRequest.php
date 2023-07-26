@@ -22,7 +22,7 @@ class AddCourseRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'          =>  'required|min:3|max:10',
+            'name'          =>  'required|min:2|max:10',
             'maxStudentNum' =>  'required',
             'credit'        =>  'required',
             'classRoom'     =>  'required|in:501,513,601,614',

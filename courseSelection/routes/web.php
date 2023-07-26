@@ -25,6 +25,9 @@ Route::prefix('page')->name('page.')->group(function () {
       Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
       Route::get('myCourse', [PageController::class, 'myCoursePage'])->name('myCoursePage');
       Route::delete('deleteCourse/{teacherCourse}', [PageController::class, 'deleteCourse'])->name('deleteCourse');
+      Route::get('courseManagements', [PageController::class, 'courseManagements'])->name('courseManagements');
+      Route::get('courseManagement', [PageController::class, 'courseManagement'])->name('courseManagement');
+
    });
    Route::get('searchCourse', [PageController::class, 'searchCoursePage'])->name('searchCoursePage');
    Route::get('searchResults', [PageController::class, 'searchResultsPage'])->name('searchResultsPage');

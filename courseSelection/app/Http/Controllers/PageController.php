@@ -267,4 +267,41 @@ class PageController extends Controller
         }
         return back();
     }
+
+    public function courseManagements()
+    {
+        return view('page.courseManagements');
+    }
+
+    public function courseManagement(Request $request)
+    {
+        $result = DB::table('users')
+            ->select(
+                'teacher_courses.id',
+                'users.name as teacherName',
+                'teacher_courses.name as courseName',
+                'teacher_courses.maxStudentNum',
+                'teacher_courses.nowStudentNum',
+                'teacher_courses.credit',
+                'teacher_courses.relate',
+                'teacher_courses.math',
+                'teacher_courses.science',
+                'teacher_courses.engineeringTheory',
+                'teacher_courses.engineeringDesign',
+                'teacher_courses.generalEducation',
+                'course_infos.classroom',
+                DB::raw('GROUP_CONCAT(course_infos.time) as times')
+            )
+            ->join('teacher_courses', 'teacher_courses.teacherId', '=', 'users.id')
+            ->join('course_infos', 'course_infos.id', '=', 'teacher_courses.id')
+            ->where('course_infos.id', '=',  $request->courseId)
+            ->groupBy('id', 'teacherName', 'courseName', 'maxStudentNum', 'nowStudentNum', 'credit', 'relate'
+                , 'classroom', 'math', 'science', 'engineeringTheory', 'engineeringDesign', 'generalEducation');
+
+        $result = $result->get();
+        $data = [
+            'result' =>  $result[0]
+        ];
+        return view('page.courseManagement', $data);
+    }
 }

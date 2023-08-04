@@ -18,6 +18,11 @@ return new class extends Migration
             $table->integer('maxStudentNum');
             $table->integer('nowStudentNum');
             $table->integer('credit');
+            $table->integer('math')->nullable();
+            $table->integer('science')->nullable();
+            $table->integer('engineeringTheory')->nullable();
+            $table->integer('engineeringDesign')->nullable();
+            $table->integer('generalEducation')->nullable();
             $table->string('relate')->nullable();
             $table->timestamps();
         });

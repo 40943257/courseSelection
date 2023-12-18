@@ -22,6 +22,7 @@ Route::prefix('page')->name('page.')->group(function () {
       Route::get('addCourse', [PageController::class, 'addCoursePage'])->name('addCoursePage');
       Route::post('addCourse', [PageController::class, 'addCourse'])->name('addCourse');
       Route::get('myCurriculum', [PageController::class, 'myCurriculumPage'])->name('myCurriculumPage');
+      Route::get('downloadMyCurriculum', [PageController::class, 'downloadMyCurriculum'])->name('downloadMyCurriculum');
       Route::post('courseSelect', [PageController::class, 'courseSelect'])->name('courseSelect');
       Route::get('myCourse', [PageController::class, 'myCoursePage'])->name('myCoursePage');
       Route::delete('deleteCourse/{teacherCourse}', [PageController::class, 'deleteCourse'])->name('deleteCourse');

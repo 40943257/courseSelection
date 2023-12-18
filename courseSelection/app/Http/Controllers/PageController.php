@@ -11,6 +11,8 @@ use Illuminate\Support\Str;
 use App\Http\Requests\AddCourseRequest;
 use App\Http\Requests\SearchResultsPageRequest;
 use App\Http\Requests\CourseSelectRequest;
+use PhpOffice\PhpWord\Element\Cell;
+use PhpOffice\PhpWord\PhpWord;
 
 class PageController extends Controller
 {
@@ -84,6 +86,65 @@ class PageController extends Controller
 
     public function myCurriculumPage()
     {
+        $data = $this->getMyCurriculum();
+        
+        return view('page.myCurriculumPage', $data);
+    }
+
+    public function downloadMyCurriculum()
+    {
+        $data = $this->getMyCurriculum();
+        $phpWord = new \PhpOffice\PhpWord\PhpWord();
+    
+        // Add a section
+        $section = $phpWord->addSection();
+    
+        // Get HTML content from a view
+        $html = view('page.layout.curriculum', $data)->render();
+    
+        // Add HTML content to the section
+        \PhpOffice\PhpWord\Shared\Html::addHtml($section, $html);
+    
+        // Find all tables and set borders
+        $tables = $section->getElements('table');
+        $tables = $this->tableSetStyle($tables);
+    
+        // Save as Word document
+        $filename = 'table_with_border_color.docx';
+        $path = storage_path($filename);
+        $phpWord->save($path);
+    
+        // Download Word file and delete it after sending
+        return response()->download($path)->deleteFileAfterSend(true);
+    }
+
+    private function tableSetStyle($tables){
+        foreach ($tables as $table) {
+            if ($table instanceof \PhpOffice\PhpWord\Element\Table) {
+                // Set border style for the table
+                $table->getStyle()->setBorderSize(6);
+                $table->getStyle()->borderColor = '000000'; // Black color, you can change it to your desired color
+
+                // Set border style for each cell in the table
+                foreach ($table->getRows() as $row) {
+                    foreach ($row->getCells() as $cell) {
+                        if ($cell instanceof \PhpOffice\PhpWord\Element\Cell) {
+                            $cell->getStyle()->setBorderSize(6);
+                            $cell->getStyle()->borderColor = '000000'; // Black color, you can change it to your desired color
+
+                            // Check if the cell contains nested tables
+                            $nestedTables = $cell->getElements('table');
+                            $this->tableSetStyle($nestedTables); // Apply style to nested tables
+                        }
+                    }
+                }
+            }
+        }
+
+        return $tables;
+    }
+
+    private function getMyCurriculum() {
         if (auth()->user()->permissions == 1) {
             $results = DB::table('teacher_courses')
                 ->select('users.name as teacherName', 'teacher_courses.name as courseName', 'course_infos.classroom', 'course_infos.time')
@@ -104,7 +165,8 @@ class PageController extends Controller
         $data = [
             'results' => $results
         ];
-        return view('page.myCurriculumPage', $data);
+
+        return $data;
     }
 
     public function searchCoursePage()

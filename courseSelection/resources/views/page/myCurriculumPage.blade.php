@@ -7,5 +7,8 @@
         <div class="row">
             @include('page.layout.curriculum')
         </div>
+        <div class="row">
+            <a href=" {{ route('page.downloadMyCurriculum') }} ">下載</a>
+        </div>
     </div>
 @endsection

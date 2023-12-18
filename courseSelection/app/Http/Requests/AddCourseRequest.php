@@ -26,7 +26,7 @@ class AddCourseRequest extends FormRequest
             'maxStudentNum' =>  'required',
             'credit'        =>  'required',
             'classRoom'     =>  'required|in:501,513,601,614',
-            'relate'        =>  'required|max:255'
+            'relate'        =>  'max:255'
         ];
     }
 }
